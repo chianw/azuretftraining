@@ -1,4 +1,3 @@
-resource-group-name = "myazuredemorg"
-nsg-name            = "myazuredemo-nsg"
-vnet-name           = "myazuredemo-vnet"
-tag-name            = "MySpecialTag"
+resource_group_name     = "myazuredemorg"
+resource_group_location = "East US"
+

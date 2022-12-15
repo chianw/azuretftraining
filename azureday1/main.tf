@@ -1,38 +1,53 @@
 resource "azurerm_resource_group" "rgexample" {
-  name     = var.resource-group-name
-  location = var.resource-group-location
+  name     = var.resource_group_name
+  location = var.resource_group_location
 }
 
-resource "azurerm_network_security_group" "nsgexample" {
-  name                = var.nsg-name
-  location            = azurerm_resource_group.rgexample.location
-  resource_group_name = azurerm_resource_group.rgexample.name
+module "virtual_network" {
+  source                = "./modules/virtual_network"
+  for_each              = var.virtual_networks
+  m_vnet_name           = each.value.name
+  m_location            = each.value.location
+  m_resource_group_name = azurerm_resource_group.rgexample.name
+  m_address_space       = each.value.address_space
+  m_dns_servers         = each.value.dns_servers
+  m_tag_name            = each.value.tags
 }
 
-resource "azurerm_virtual_network" "vnetexample" {
-  name                = var.vnet-name
-  location            = azurerm_resource_group.rgexample.location
-  resource_group_name = azurerm_resource_group.rgexample.name
-  address_space       = ["10.0.0.0/16"]
-  dns_servers         = ["10.0.0.4", "10.0.0.5"]
 
-  tags = {
-    environment = var.tag-name
-  }
-}
+# resource "azurerm_virtual_network_peering" "vnet1-vnet2" {
+#   name                      = "peer1to2"
+#   resource_group_name       = azurerm_resource_group.rgexample.name
+#   virtual_network_name      = module.virtual_network["east_us"].azurerm_virtual_network.vnet.name
+#   remote_virtual_network_id = module.virtual_network["australiaeast"].azurerm_virtual_network.vnet.id
+# }
 
-resource "azurerm_subnet" "internal" {
-  name                 = "internal"
-  resource_group_name  = azurerm_resource_group.rgexample.name
-  virtual_network_name = azurerm_virtual_network.vnetexample.name
-  address_prefixes     = ["10.0.1.0/24"]
-}
+# resource "azurerm_virtual_network_peering" "example-2" {
+#   name                      = "peer2to1"
+#   resource_group_name       = azurerm_resource_group.rgexample.name
+#   virtual_network_name      = azurerm_virtual_network.vnetexample1.name
+#   remote_virtual_network_id = azurerm_virtual_network.vnetexample.id
+# }
 
-resource "azurerm_subnet_network_security_group_association" "nsgtosubnetassociation" {
-  subnet_id                 = azurerm_subnet.internal.id
-  network_security_group_id = azurerm_network_security_group.nsgexample.id
-}
+# resource "azurerm_subnet" "internal" {
+#   name                 = "internal"
+#   resource_group_name  = azurerm_resource_group.rgexample.name
+#   virtual_network_name = azurerm_virtual_network.vnetexample.name
+#   address_prefixes     = ["10.0.1.0/24"]
+# }
 
+# resource "azurerm_subnet_network_security_group_association" "nsgtosubnetassociation" {
+#   subnet_id                 = azurerm_subnet.internal.id
+#   network_security_group_id = azurerm_network_security_group.nsgexample.id
+# }
+
+# resource "azurerm_network_security_group" "nsgexample" {
+#   name                = var.nsg-name
+#   location            = azurerm_resource_group.rgexample.location
+#   resource_group_name = azurerm_resource_group.rgexample.name
+# }
+
+/*
 resource "azurerm_network_interface" "vm-nic" {
   name                = "vm-nic"
   location            = azurerm_resource_group.rgexample.location
@@ -82,3 +97,5 @@ resource "azurerm_virtual_machine" "main" {
     environment = "staging"
   }
 }
+
+*/
