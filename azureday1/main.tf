@@ -4,22 +4,39 @@ resource "azurerm_resource_group" "rgexample" {
 }
 
 module "virtual_network" {
-  source                = "./modules/virtual_network"
-  for_each              = var.virtual_networks
-  m_vnet_name           = each.value.name
-  m_location            = each.value.location
-  m_resource_group_name = azurerm_resource_group.rgexample.name
+  source      = "./modules/virtual_network"
+  for_each    = var.virtual_networks
+  m_vnet_name = each.value.name
+  m_location  = each.value.location
+  # m_resource_group_name = azurerm_resource_group.rgexample.name
+  m_resource_group_name = each.value.resource_group_name
   m_address_space       = each.value.address_space
   m_dns_servers         = each.value.dns_servers
   m_tag_name            = each.value.tags
+
+  depends_on = [
+    azurerm_resource_group.rgexample
+  ]
 }
 
+output "virtual_network" {
+  value = module.virtual_network
+}
+
+
+# output "vnet_properties" {
+#   value = module.virtual_network["australia_east"]
+# }
+
+output "vnet_properties" {
+  value = [for virtualnetwork in module.virtual_network : virtualnetwork.name]
+}
 
 # resource "azurerm_virtual_network_peering" "vnet1-vnet2" {
 #   name                      = "peer1to2"
 #   resource_group_name       = azurerm_resource_group.rgexample.name
-#   virtual_network_name      = module.virtual_network["east_us"].azurerm_virtual_network.vnet.name
-#   remote_virtual_network_id = module.virtual_network["australiaeast"].azurerm_virtual_network.vnet.id
+#   virtual_network_name      = vnet_properties["australia_east"].vnet_name
+#   remote_virtual_network_id = vnet_properties["east_us"].vnet_id
 # }
 
 # resource "azurerm_virtual_network_peering" "example-2" {

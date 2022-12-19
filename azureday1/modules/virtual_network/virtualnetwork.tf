@@ -6,3 +6,15 @@ resource "azurerm_virtual_network" "vnet" {
   dns_servers         = var.m_dns_servers
   tags                = var.m_tag_name
 }
+
+output "name" {
+  value = azurerm_virtual_network.vnet.name
+}
+
+output "id" {
+  value = azurerm_virtual_network.vnet.id
+}
+
+output "resource_group_name" {
+  value = azurerm_virtual_network.vnet.resource_group_name
+}
