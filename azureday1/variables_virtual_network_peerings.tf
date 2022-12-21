@@ -8,12 +8,14 @@ variable "virtual_network_peerings" {
           name                         = "au-eastus"
           resource_group_name          = "myazuredemorg"
           allow_virtual_network_access = true
+          allow_gateway_transit        = true
         }
 
         southeast_asia = {
           name                         = "au-southeastasia"
           resource_group_name          = "myazuredemorg"
           allow_virtual_network_access = false
+          allow_gateway_transit        = false
         }
       }
     }

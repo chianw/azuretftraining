@@ -5,4 +5,5 @@ resource "azurerm_virtual_network_peering" "peer" {
   virtual_network_name         = var.virtual_network_name
   remote_virtual_network_id    = var.virtual_networks[each.key].id
   allow_virtual_network_access = try(each.value.allow_virtual_network_access, null)
+  allow_gateway_transit        = try(each.value.allow_gateway_transit, null)
 }
