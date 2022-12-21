@@ -2,7 +2,7 @@ resource "azurerm_resource_group" "rgexample" {
   name     = var.resource_group_name
   location = var.resource_group_location
 }
-
+# My comment
 module "virtual_network" {
   source      = "./modules/virtual_network"
   for_each    = var.virtual_networks

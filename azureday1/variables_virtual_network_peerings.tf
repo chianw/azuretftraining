@@ -10,12 +10,15 @@ variable "virtual_network_peerings" {
           allow_virtual_network_access = true
 # only set use_remote_gateway to true when you have a gateway configured
 #          use_remote_gateways          = true
+          allow_gateway_transit        = true
+          allow_forwarded_traffic      = true
         }
 
         southeast_asia = {
           name                         = "au-southeastasia"
           resource_group_name          = "myazuredemorg"
           allow_virtual_network_access = false
+          allow_gateway_transit        = false
         }
       }
     }
