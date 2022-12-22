@@ -9,6 +9,7 @@ variable "virtual_network_peerings" {
           resource_group_name          = "myazuredemorg"
           allow_virtual_network_access = true
           allow_gateway_transit        = true
+          allow_forwarded_traffic      = true
         }
 
         southeast_asia = {
