@@ -8,6 +8,8 @@ variable "virtual_network_peerings" {
           name                         = "au-eastus"
           resource_group_name          = "myazuredemorg"
           allow_virtual_network_access = true
+# only set use_remote_gateway to true when you have a gateway configured
+#          use_remote_gateways          = true
           allow_gateway_transit        = true
           allow_forwarded_traffic      = true
         }
@@ -45,6 +47,7 @@ variable "virtual_network_peerings" {
         australia_east = {
           name                = "eastus_au"
           resource_group_name = "myazuredemorg"
+          allow_gateway_transit = true
         }
       }
     }
